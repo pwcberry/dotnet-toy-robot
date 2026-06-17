@@ -9,16 +9,16 @@ public class RobotTests
     {
         // Arrange
         var grid = new Grid();
-        
+
         // Act
         var robot = new Robot(grid);
-        
+
         // Assert
         Assert.Equal(0, robot.Position.X);
         Assert.Equal(0, robot.Position.Y);
         Assert.Equal(Direction.North, robot.Facing);
     }
-    
+
     [Theory]
     [InlineData(-1, -2)]
     [InlineData(-1, 2)]
@@ -30,8 +30,155 @@ public class RobotTests
     {
         // Arrange
         var grid = new Grid();
-        
+
         // Act
-        Assert.Throws<ArgumentOutOfRangeException>(() => new Robot(grid, new Position(x, y), Direction.North));
+        Assert.Throws<OutOfBoundsException>(() => new Robot(grid, new Position(x, y), Direction.North));
     }
+
+    [Theory]
+    [InlineData(0, 0, Direction.East)]
+    [InlineData(1, 2, Direction.West)]
+    [InlineData(2, 4, Direction.South)]
+    [InlineData(4, 2, Direction.North)]
+    public void Place_InBounds_DoesNotThrow(int x, int y, Direction facing)
+    {
+        // Arrange
+        var grid = new Grid();
+        var robot = new Robot(grid);
+
+        // Act
+        robot.Place(x, y, facing);
+
+        // Assert
+        Assert.Equal(robot.Position.X, x);
+        Assert.Equal(robot.Position.Y, y);
+        Assert.Equal(robot.Facing, facing);
+    }
+
+    [Theory]
+    [InlineData(-1, 0, Direction.East)]
+    [InlineData(1, -2, Direction.West)]
+    [InlineData(6, 4, Direction.South)]
+    [InlineData(5, 6, Direction.North)]
+    public void Place_OutOfBounds_Throws(int x, int y, Direction facing)
+    {
+        // Arrange
+        var grid = new Grid();
+        var robot = new Robot(grid);
+
+        // Act
+        Assert.Throws<OutOfBoundsException>(() => robot.Place(x, y, facing));
+    }
+    
+    [Fact]    
+    public void TurnLeft_FromNorth_FacesWest()
+    {
+        // Arrange
+        var grid = new Grid();
+        var robot = new Robot(grid);
+
+        // Act
+        robot.TurnLeft();
+
+        // Assert
+        Assert.Equal(Direction.West, robot.Facing);
+    }
+    
+    [Fact]    
+    public void TurnLeft_FromWest_FacesSouth()
+    {
+        // Arrange
+        var grid = new Grid();
+        var robot = new Robot(grid, Position.Origin,  Direction.West);
+
+        // Act
+        robot.TurnLeft();
+
+        // Assert
+        Assert.Equal(Direction.South, robot.Facing);
+    }
+    
+    [Fact]    
+    public void TurnLeft_FromSouth_FacesEast()
+    {
+        // Arrange
+        var grid = new Grid();
+        var robot = new Robot(grid, Position.Origin,  Direction.South);
+
+        // Act
+        robot.TurnLeft();
+
+        // Assert
+        Assert.Equal(Direction.East, robot.Facing);
+    }
+    
+     [Fact]
+     public void TurnLeft_FromEast_FacesNorth()
+     {
+         // Arrange
+         var grid = new Grid();
+         var robot = new Robot(grid, Position.Origin,  Direction.East);
+
+         // Act
+         robot.TurnLeft();
+
+         // Assert
+         Assert.Equal(Direction.North, robot.Facing);
+     }
+     
+     [Fact]
+     public void TurnRight_FromNorth_FacesEast()
+     {
+         // Arrange
+         var grid = new Grid();
+         var robot = new Robot(grid, Position.Origin, Direction.North);
+
+         // Act
+         robot.TurnRight();
+
+         // Assert
+         Assert.Equal(Direction.East, robot.Facing);
+     }
+     
+     [Fact]
+     public void TurnRight_FromEast_FacesSouth()
+     {
+         // Arrange
+         var grid = new Grid();
+         var robot = new Robot(grid, Position.Origin, Direction.East);
+
+         // Act
+         robot.TurnRight();
+
+         // Assert
+         Assert.Equal(Direction.South, robot.Facing);
+     }
+     
+     [Fact]
+     public void TurnRight_FromSouth_FacesWest()
+     {
+         // Arrange
+         var grid = new Grid();
+         var robot = new Robot(grid, Position.Origin, Direction.South);
+
+         // Act
+         robot.TurnRight();
+
+         // Assert
+         Assert.Equal(Direction.West, robot.Facing);
+     }
+     
+     [Fact]
+     public void TurnRight_FromWest_FacesNorth()
+     {
+         // Arrange
+         var grid = new Grid();
+         var robot = new Robot(grid, Position.Origin, Direction.West);
+
+         // Act
+         robot.TurnRight();
+
+         // Assert
+         Assert.Equal(Direction.North, robot.Facing);
+     }
 }

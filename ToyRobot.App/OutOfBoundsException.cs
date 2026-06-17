@@ -1,0 +1,12 @@
+namespace ToyRobot.App;
+
+public class OutOfBoundsException : ApplicationException
+{
+    public OutOfBoundsException(string message) : base(message)
+    {
+    }
+    
+    public OutOfBoundsException(int x, int y, int width, int height) : base($"Position ({x}, {y}) is out of bounds for grid of size {width}x{height}")
+    {
+    }
+}
