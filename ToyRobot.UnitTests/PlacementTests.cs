@@ -1,0 +1,283 @@
+using ToyRobot.App;
+
+namespace ToyRobot.UnitTests;
+
+public class PlacementTests
+{
+    [Fact]
+    public void Constructor_StoresProperties()
+    {
+        // Arrange & Act
+        var placement = new Placement(2, 3, Direction.East);
+
+        // Assert
+        Assert.Equal(2, placement.X);
+        Assert.Equal(3, placement.Y);
+        Assert.Equal(Direction.East, placement.Facing);
+    }
+
+    [Theory]
+    [InlineData(0, 0, Direction.North)]
+    [InlineData(4, 4, Direction.South)]
+    [InlineData(1, 2, Direction.East)]
+    [InlineData(3, 1, Direction.West)]
+    public void Constructor_WithVariousValues(int x, int y, Direction facing)
+    {
+        // Arrange & Act
+        var placement = new Placement(x, y, facing);
+
+        // Assert
+        Assert.Equal(x, placement.X);
+        Assert.Equal(y, placement.Y);
+        Assert.Equal(facing, placement.Facing);
+    }
+
+    [Fact]
+    public void Empty_HasCorrectValues()
+    {
+        // Arrange & Act
+        var empty = Placement.Empty;
+
+        // Assert
+        Assert.Equal(-1, empty.X);
+        Assert.Equal(-1, empty.Y);
+        Assert.Equal(Direction.South, empty.Facing);
+    }
+
+    [Fact]
+    public void Parse_WithValidStringInput_ReturnsPlacement()
+    {
+        // Arrange
+        var input = "1,2,NORTH";
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(1, placement.X);
+        Assert.Equal(2, placement.Y);
+        Assert.Equal(Direction.North, placement.Facing);
+    }
+
+    [Theory]
+    [InlineData("0,0,NORTH")]
+    [InlineData("4,4,SOUTH")]
+    [InlineData("2,3,EAST")]
+    [InlineData("1,1,WEST")]
+    public void Parse_WithVariousValidStrings(string input)
+    {
+        // Arrange & Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.NotEqual(-1, placement.X);
+    }
+
+    [Fact]
+    public void Parse_WithLowercaseDirection_ReturnsPlacement()
+    {
+        // Arrange
+        var input = "1,2,north";
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(1, placement.X);
+        Assert.Equal(2, placement.Y);
+        Assert.Equal(Direction.North, placement.Facing);
+    }
+
+    [Fact]
+    public void Parse_WithMixedCaseDirection_ReturnsPlacement()
+    {
+        // Arrange
+        var input = "2,3,EaSt";
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(2, placement.X);
+        Assert.Equal(3, placement.Y);
+        Assert.Equal(Direction.East, placement.Facing);
+    }
+
+    [Fact]
+    public void Parse_WithInvalidDirection_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = "1,2,INVALID";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithInvalidXCoordinate_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = "abc,2,NORTH";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithInvalidYCoordinate_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = "1,xyz,NORTH";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithTooFewParts_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = "1,NORTH";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithTooManyParts_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = "1,2,NORTH,EXTRA";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithArrayInput_ReturnsPlacement()
+    {
+        // Arrange
+        var input = new[] { "1", "2", "NORTH" };
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(1, placement.X);
+        Assert.Equal(2, placement.Y);
+        Assert.Equal(Direction.North, placement.Facing);
+    }
+
+    [Theory]
+    [InlineData("0", "0", "NORTH")]
+    [InlineData("4", "4", "SOUTH")]
+    [InlineData("2", "3", "EAST")]
+    [InlineData("1", "1", "WEST")]
+    public void Parse_WithArrayInputVariousValues(string x, string y, string direction)
+    {
+        // Arrange
+        var input = new[] { x, y, direction };
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.NotEqual(-1, placement.X);
+    }
+
+    [Fact]
+    public void Parse_WithArrayInputLowercaseDirection_ReturnsPlacement()
+    {
+        // Arrange
+        var input = new[] { "1", "2", "south" };
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(1, placement.X);
+        Assert.Equal(2, placement.Y);
+        Assert.Equal(Direction.South, placement.Facing);
+    }
+
+    [Fact]
+    public void Parse_WithArrayInputInvalidDirection_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = new[] { "1", "2", "INVALID" };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithArrayInputInvalidXCoordinate_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = new[] { "notanumber", "2", "NORTH" };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithArrayInputInvalidYCoordinate_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = new[] { "1", "notanumber", "NORTH" };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithArrayInputTooFewElements_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = new[] { "1", "NORTH" };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithArrayInputTooManyElements_ThrowsArgumentException()
+    {
+        // Arrange
+        var input = new[] { "1", "2", "NORTH", "EXTRA" };
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => Placement.Parse(input));
+    }
+
+    [Fact]
+    public void Parse_WithNegativeCoordinates_ReturnsPlacement()
+    {
+        // Arrange
+        var input = "-1,-2,WEST";
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(-1, placement.X);
+        Assert.Equal(-2, placement.Y);
+        Assert.Equal(Direction.West, placement.Facing);
+    }
+
+    [Fact]
+    public void Parse_WithLargeCoordinates_ReturnsPlacement()
+    {
+        // Arrange
+        var input = "1000,99999,EAST";
+
+        // Act
+        var placement = Placement.Parse(input);
+
+        // Assert
+        Assert.Equal(1000, placement.X);
+        Assert.Equal(99999, placement.Y);
+        Assert.Equal(Direction.East, placement.Facing);
+    }
+}
+
