@@ -110,11 +110,26 @@ public class InputParserTests
         Assert.Equal(Placement.Empty, result.Placement);
     }
 
+    [Fact]
+    public void Parse_QuitCommand_ReturnsCorrectAction()
+    {
+        // Arrange
+        var input = "QUIT";
+
+        // Act
+        var result = InputParser.Parse(input);
+
+        // Assert
+        Assert.Equal(Command.Quit, result.Command);
+        Assert.Equal(Placement.Empty, result.Placement);
+    }
+
     [Theory]
     [InlineData("move ")]
     [InlineData("left ")]
     [InlineData("right ")]
     [InlineData("report ")]
+    [InlineData("quit ")]
     public void Parse_CommandsLowercase_ReturnsCorrectCommand(string input)
     {
         // Act
@@ -127,6 +142,7 @@ public class InputParserTests
             "LEFT" => Command.Left,
             "RIGHT" => Command.Right,
             "REPORT" => Command.Report,
+            "QUIT" => Command.Quit,
             _ => Command.Invalid
         };
         Assert.Equal(expectedCommand, result.Command);

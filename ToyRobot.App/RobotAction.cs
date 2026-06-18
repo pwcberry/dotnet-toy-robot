@@ -17,5 +17,10 @@ public class RobotAction
     public Command Command { get; }
     
     public Placement Placement { get; }
+
+    public override string ToString()
+    {
+        return $"Action: {Command} {Placement}".TrimEnd();
+    }
 }
 

@@ -14,6 +14,7 @@ public static class InputParser
             "LEFT" => Command.Left,
             "RIGHT" => Command.Right,
             "REPORT" => Command.Report,
+            "QUIT" => Command.Quit,
             _ => Command.Invalid
         };
 

@@ -7,5 +7,6 @@ public enum Command
     Left,
     Right,
     Report,
+    Quit,
     Invalid
 }

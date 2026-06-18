@@ -7,12 +7,38 @@ namespace ToyRobot.App;
 /// <param name="y">The Y coordinate of the robot's position on the table.</param>
 /// <param name="facing">The direction the robot is facing.</param>
 public readonly struct Placement(int x, int y, Direction facing)
+    : IEquatable<Placement>
 {
     public int X => x;
     public int Y => y;
     public Direction Facing => facing;
     
     public static readonly Placement Empty = new(-1, -1, Direction.South);
+
+    public bool IsEmpty => this == Empty;
+
+    #region Equality
+
+    public bool Equals(Placement other) => X == other.X && Y == other.Y && Facing == other.Facing;
+
+    public override bool Equals(object? obj) => obj is Placement other && Equals(other);
+
+    public override int GetHashCode() => HashCode.Combine(X, Y, Facing);
+
+    public static bool operator ==(Placement left, Placement right) => left.Equals(right);
+
+    public static bool operator !=(Placement left, Placement right) => !left.Equals(right);
+    #endregion
+
+    /// <summary>
+    /// Return the position and facing direction as a tuple.
+    /// </summary>
+    public void Deconstruct(out int x, out int y, out Direction facing)
+    {
+        x = X;
+        y = Y;
+        facing = Facing;
+    }
 
     public static Placement Parse(string inputs)
     {

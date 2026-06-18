@@ -86,4 +86,6 @@ public class Robot
         Position = newPosition;
         return true;
     }
+
+    public override string ToString() => $"{Position.X},{Position.Y},{Facing.ToString().ToUpperInvariant()}";
 }

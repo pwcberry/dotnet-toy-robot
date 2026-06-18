@@ -2,6 +2,11 @@
   <Folder Name="/docs/">
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/samples/">
+    <File Path="samples/example1.txt" />
+    <File Path="samples/example2.txt" />
+    <File Path="samples/example3.txt" />
+  </Folder>
   <Folder Name="/ToyRobot.App/">
     <Project Path="ToyRobot.App/ToyRobot.App.csproj" />
   </Folder>

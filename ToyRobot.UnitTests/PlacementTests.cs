@@ -45,6 +45,34 @@ public class PlacementTests
     }
 
     [Fact]
+    public void Equals_WithSameValues_ReturnsTrue()
+    {
+        // Arrange
+        var left = new Placement(2, 3, Direction.West);
+        var right = new Placement(2, 3, Direction.West);
+
+        // Act & Assert
+        Assert.True(left.Equals(right));
+        Assert.True(left == right);
+        Assert.False(left != right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
+    }
+
+    [Fact]
+    public void Equals_WithDifferentValues_ReturnsFalse()
+    {
+        // Arrange
+        var left = new Placement(2, 3, Direction.West);
+        var right = new Placement(3, 3, Direction.West);
+
+        // Act & Assert
+        Assert.False(left.Equals(right));
+        Assert.False(left == right);
+        Assert.True(left != right);
+    }
+
+
+    [Fact]
     public void Parse_WithValidStringInput_ReturnsPlacement()
     {
         // Arrange
