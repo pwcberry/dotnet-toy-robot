@@ -87,6 +87,3 @@ For the reader of the code, these design decisions should reduce cognitive load 
 I did use AI to assist in writing some of the code, mostly to:
 
 * Write unit tests
-* To implement the methods defined in the interface of `IEquatable<T>`
-
-See the [Prompts document](./Prompts.md) for more details of the Copilot interactions.

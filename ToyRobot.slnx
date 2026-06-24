@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/docs/">
-    <File Path="Prompts.md" />
     <File Path="README.md" />
     <File Path="SPEC.md" />
   </Folder>

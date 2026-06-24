@@ -1,11 +1,4 @@
 ﻿using ToyRobot.Console;
 
-TextReader input = Console.In;
-
-if (Console.IsInputRedirected)
-{
-    input = Console.In;
-}
-
-var controller = new Controller(input, Console.Out);
+var controller = new Controller(Console.In, Console.Out);
 controller.Run();
